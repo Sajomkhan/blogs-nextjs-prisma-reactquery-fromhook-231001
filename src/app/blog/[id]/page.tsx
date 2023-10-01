@@ -1,4 +1,5 @@
-import ButtonComponent from "@/components/ButtonComponent";
+import ButtonBack from "@/components/button/ButtonBack";
+import ButtonComponent from "@/components/button/ButtonComponent";
 import { Pen, Trash } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -6,6 +7,7 @@ import React from "react";
 const SingleBlog = () => {
   return (
     <div>
+      <ButtonBack/>
       <div className="mb-8">
         <h2 className="text-2xl font-bold my-4">Post Details</h2>
         <div className="flex items-center">

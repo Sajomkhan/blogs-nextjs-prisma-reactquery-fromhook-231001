@@ -5,16 +5,16 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 interface FormPostProps {
   submit: SubmitHandler<FormInputPost>;
+  isEditing?: boolean;
 }
 
-const FormPost: FC<FormPostProps> = ({ submit }) => {
+const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },
   } = useForm<FormInputPost>();
-
 
   return (
     <form
@@ -58,14 +58,14 @@ const FormPost: FC<FormPostProps> = ({ submit }) => {
 
       <select
         {...register("tag", {
-            required: "Seclect the Tag"
+          required: "Seclect the Tag",
         })}
         className="select select-bordered w-full max-w-lg"
         defaultValue=""
       >
         <option disabled value="">
           Select tag
-        </option>        
+        </option>
         <option>JavaScript</option>
         <option>PHP</option>
         <option>Python</option>
@@ -75,8 +75,9 @@ const FormPost: FC<FormPostProps> = ({ submit }) => {
         <p className="text-red-500">{errors.tag?.message}</p>
       )}
 
-
-      <button className="btn btn-primary w-full max-w-lg">Create</button>
+      <button className="btn btn-primary w-full max-w-lg">
+        {isEditing ? "Update" : "Create"}
+      </button>
     </form>
   );
 };

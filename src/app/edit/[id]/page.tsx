@@ -2,14 +2,18 @@
 import FormPost from "@/components/FormPost";
 import { SubmitHandler } from "react-hook-form";
 import { FormInputPost } from "@/types";
+import ButtonBack from "@/components/button/ButtonBack";
 
 const EditPost = () => {
-  const handleCreatePost: SubmitHandler<FormInputPost> = (data) => {};
+  const handleEditPost: SubmitHandler<FormInputPost> = (data) => {
+    console.log(data);   
+  };
 
   return (
     <div>
-      <h1 className="text-2xl my-4 font-bold text-center">Add new post</h1>
-      <FormPost submit={handleCreatePost} />
+      <ButtonBack/>
+      <h1 className="text-2xl my-4 font-bold text-center">Edit Post</h1>
+      <FormPost submit={handleEditPost} isEditing />
     </div>
   );
 };
