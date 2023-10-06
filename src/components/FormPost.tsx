@@ -1,5 +1,8 @@
 "use client";
 import { FormInputPost } from "@/types";
+import { Tag } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -12,15 +15,25 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<FormInputPost>();
+
+  // fetch tags list
+  const { data: dataTags, isLoading: isloadingTags } = useQuery<Tag[]>({
+    queryKey: ["tags"],
+    queryFn: async () => {
+      const response = await axios.get("/api/tags");
+      return response.data;
+    },
+  });
+
 
   return (
     <form
       onSubmit={handleSubmit(submit)}
       className="flex flex-col items-center justify-center gap-5 mt-10"
     >
+      {/* --------Title Input--------- */}
       <input
         {...register("title", {
           required: "Title is required",
@@ -39,6 +52,7 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
         <p className="text-red-500">{errors.title?.message}</p>
       )}
 
+      {/* --------Content Input--------- */}
       <textarea
         {...register("content", {
           required: "Content is required",
@@ -56,23 +70,28 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
         <p className="text-red-500">{errors.content?.message}</p>
       )}
 
-      <select
-        {...register("tag", {
-          required: "Seclect the Tag",
-        })}
-        className="select select-bordered w-full max-w-lg"
-        defaultValue=""
-      >
-        <option disabled value="">
-          Select tag
-        </option>
-        <option>JavaScript</option>
-        <option>PHP</option>
-        <option>Python</option>
-      </select>
+      {/* --------Select Input--------- */}
+      {isloadingTags ? (
+        <span className="loading loading-ring loading-md"></span>
+      ) : (
+        <select
+          {...register("tagId", {
+            required: "Seclect the Tag",
+          })}
+          className="select select-bordered w-full max-w-lg"
+          defaultValue=""
+        >
+          <option disabled value="">
+            Select tag
+          </option>
+          {dataTags?.map((tags) => (
+            <option key={tags.id}>{tags.name}</option>
+          ))}
+        </select>
+      )}
 
-      {errors.tag?.message && (
-        <p className="text-red-500">{errors.tag?.message}</p>
+      {errors.tagId?.message && (
+        <p className="text-red-500">{errors.tagId?.message}</p>
       )}
 
       <button className="btn btn-primary w-full max-w-lg">
